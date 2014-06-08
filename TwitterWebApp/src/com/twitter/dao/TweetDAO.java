@@ -4,21 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.twitter.connectionManager.ConnectionManager;
 import com.twitter.pojo.Tweet;
-import com.twitter.pojo.User;
-import com.twitter.utils.DbClose;
+
+import com.twitter.utils.DatabaseUtils;
 
 public class TweetDAO {
-	Tweet tweet;
-	Connection connection;
-	PreparedStatement preparedStatement;
-	ResultSet resultSet;
-	ArrayList<Integer> listOfTweetId;
+	private Tweet tweet;
+	private Connection connection;
+	private PreparedStatement preparedStatement;
+	private ResultSet resultSet;
+	private List<Integer> listTweetId;
 	
-	public ArrayList<Integer> getAllTweets(int userId){
+	public List<Integer> getAllTweets(int userId){
 		String selectQuery = "select TWEET_ID from TWEETS where USER_ID = ?";
 		try{
 		connection = ConnectionManager.getConnection();
@@ -26,15 +26,17 @@ public class TweetDAO {
 		preparedStatement.setInt(1, userId);
 		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()){
-			listOfTweetId.add(resultSet.getInt("TWEET_ID"));
+			listTweetId.add(resultSet.getInt("TWEET_ID"));
 		}
 		
 		
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally{
+			closeAll();	
 		}
-		closeAll();
-		return listOfTweetId;
+		
+		return listTweetId;
 	}
 	
 	public Tweet findById(int tweetId){
@@ -47,12 +49,14 @@ public class TweetDAO {
 			 resultSet=preparedStatement.executeQuery();
 			
 			 while(resultSet.next()){
-				 tweet.setTweet_Text(resultSet.getString("TWEET_TEXT"));
-				 tweet.setTweet_Id(resultSet.getInt("TWEET_ID"));
+				tweet.setTweetText(resultSet.getString("TWEET_TEXT"));
+				 tweet.setTweetId(resultSet.getInt("TWEET_ID"));
 			 }
 			 
 			 }catch(SQLException e){
 				 e.printStackTrace();
+			 }finally{
+				 closeAll();	
 			 }
 			
 			return tweet;
@@ -61,28 +65,30 @@ public class TweetDAO {
 	
 	
 
-public boolean addTweet(User user, String tweetText){
-	String InsertQuery = "INSERT INTO TABLE TWEETS (TWEET_TEXT,USER_ID ) "
-			+ "VALUES(?,?,?)";
-	boolean flag = false;
+public boolean addTweet(int userId, String tweetText){
+	String insertQuery = "INSERT INTO TABLE TWEETS (TWEET_TEXT,USER_ID ) "
+			+ "VALUES(?,?)";
+	boolean isTweetAdded = false;
 	try{
 	connection =ConnectionManager.getConnection();
-	preparedStatement = connection.prepareStatement(InsertQuery);
-	preparedStatement.setInt(1, user.getUser_id());
+	preparedStatement = connection.prepareStatement(insertQuery);
+	preparedStatement.setInt(1, userId);
 	preparedStatement.setString(2, tweetText);
-	flag = preparedStatement.execute();
-	closeAll();
+	isTweetAdded = preparedStatement.execute();
+	
 	}catch(SQLException e){
 		e.printStackTrace();
+	}finally{
+		closeAll();	
 	}
-	return flag;
+	return isTweetAdded;
 }
 
 
 	private void closeAll() {
-		DbClose.close(resultSet);
-		DbClose.close(preparedStatement);
-		DbClose.close(connection);
+		DatabaseUtils.close(resultSet);
+		DatabaseUtils.close(preparedStatement);
+		DatabaseUtils.close(connection);
 		
 	}
 

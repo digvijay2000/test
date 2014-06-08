@@ -1,29 +1,29 @@
 package com.twitter.pojo;
 
 public class Address {
-	private int user_Id;
-	private int address_Id;
-	private String street_Addr;
+	private int userId;
+	private int addressId;
+	private String streetAddress;
 	private int pincode;
 	private String city;
 	private String country;
-	public int getUser_Id() {
-		return user_Id;
+	public int getUserId() {
+		return userId;
 	}
-	public void setUser_Id(int user_Id) {
-		this.user_Id = user_Id;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
-	public int getAddress_Id() {
-		return address_Id;
+	public int getAddressId() {
+		return addressId;
 	}
-	public void setAddress_Id(int address_Id) {
-		this.address_Id = address_Id;
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
 	}
-	public String getStreet_Addr() {
-		return street_Addr;
+	public String getStreetAddress() {
+		return streetAddress;
 	}
-	public void setStreet_Addr(String street_Addr) {
-		this.street_Addr = street_Addr;
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
 	}
 	public int getPincode() {
 		return pincode;

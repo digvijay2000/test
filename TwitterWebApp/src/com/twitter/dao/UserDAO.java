@@ -1,16 +1,16 @@
 package com.twitter.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 import com.twitter.connectionManager.ConnectionManager;
 import com.twitter.pojo.User;
-import com.twitter.utils.DateConversion;
-import com.twitter.utils.DbClose;
+
+import com.twitter.utils.DatabaseUtils;
 
 public class UserDAO {
 	
@@ -18,17 +18,19 @@ public class UserDAO {
 	PreparedStatement preparedStatement = null;
 	ResultSet resultSet =null;
 	 User user;
-	public User findById(int user_Id) {
+	 
+	public User findById(int userId) {
 		 String selectQuery ="select * from USERS where USER_ID = ? ";
 		 try{
 		 connection = ConnectionManager.getConnection();
 		 preparedStatement = connection.prepareStatement(selectQuery);
-		 preparedStatement.setInt(1, user_Id);
+		 preparedStatement.setInt(1, userId);
 		 resultSet=preparedStatement.executeQuery();
-		 user= new User();
-			setUser(resultSet,user);
+		 user= resultSetIterator(resultSet);
 		 }catch(SQLException e){
 			 e.printStackTrace();
+		 }finally{
+			 closeAll();
 		 }
 		
 		return user;
@@ -37,27 +39,27 @@ public class UserDAO {
 	
 
 
-	public User findByName(String email_Id){
+	public User findByName(String emailAddress){
 		String selectQuery = "select * from USERS where EMAIL_ID = ?";
 		try{
 		connection =ConnectionManager.getConnection();
 		preparedStatement = connection.prepareStatement(selectQuery);
-		preparedStatement.setString(1, email_Id);
+		preparedStatement.setString(1, emailAddress);
 		resultSet = preparedStatement.executeQuery();
-		user = new User();
-		setUser(resultSet, user);
+		user =resultSetIterator(resultSet);
 		}catch(SQLException e){
 			e.printStackTrace();
-		}
+		}finally{
 		closeAll();
+		}
 		return user;
 	}
 	
 	
-	public boolean insertUser(User user){
+	public boolean addUser(User user){
 		String InsertQuery = "INSERT INTO USERS(EMAILD_ID,PASSWORD,FIRST_NAME,LAST_NAME,"
 				+ "GENDER,DOB,PHONE_NO,ALTERNATE_NO) VALUES(?,?,?,?,?,?,?)";
-		boolean flag = false;
+		boolean isUserAdded = false;
 		try{
 		connection = ConnectionManager.getConnection();
 		preparedStatement = connection.prepareStatement(InsertQuery);
@@ -66,21 +68,23 @@ public class UserDAO {
 		preparedStatement.setString(3, user.getFirst_Name());
 		preparedStatement.setString(4, user.getLast_Name());
 		preparedStatement.setString(5, user.getGender());
-		preparedStatement.setDate(6, DateConversion.javaToSqlDate(user.getDob()));
+		preparedStatement.setDate(6, DatabaseUtils.javaToSqlDate(user.getDob()));
 		preparedStatement.setInt(7, user.getPhone_No());
-		preparedStatement.setInt(7, user.getAlternate_No());
-		flag = preparedStatement.execute();
-		closeAll();	
+		preparedStatement.setInt(8, user.getAlternate_No());
+		isUserAdded = preparedStatement.execute();
+		
 		
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally{
+			closeAll();	
 		}
-		return flag;
+		return isUserAdded;
 	}
 	
 	
-	private void setUser(ResultSet resultSet, User user)  {
-		try{
+	private User resultSetIterator(ResultSet resultSet)  {
+		try{			
 		while(resultSet.next()){
 			user.setUser_id(resultSet.getInt("USER_ID"));
 			user.setFirst_Name(resultSet.getString("FIRST_NAME"));
@@ -89,16 +93,13 @@ public class UserDAO {
 			user.setPhone_No(resultSet.getInt("PHONE_NO"));
 			user.setStatus(resultSet.getString("STATUS"));
 			user.setEmail_Id(resultSet.getString("EMAIL_ID"));
-			java.sql.Date dob = resultSet.getDate("DOB");
-			java.util.Date dobFormatted = new java.util.Date(dob.getDate());
-			user.setDob(dobFormatted);
-			java.sql.Timestamp created_time =resultSet.getTimestamp("CREATED_TIME");
-			java.util.Date created_timeFormatted = new java.util.Date(created_time.getTime());
-//			user.setCreated_Time(created_timeFormatted);			
+			user.setDob(DatabaseUtils.sqlToJavaDate(resultSet.getDate("DOB")));
+						
 		}
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
+		return user;
 		
 	}
 	
@@ -108,9 +109,9 @@ public class UserDAO {
 
 
 	private void closeAll() {
-		DbClose.close(resultSet);
-		DbClose.close(preparedStatement);
-		DbClose.close(connection);
+		DatabaseUtils.close(resultSet);
+		DatabaseUtils.close(preparedStatement);
+		DatabaseUtils.close(connection);
 		
 	}
 

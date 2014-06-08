@@ -2,20 +2,20 @@ package com.twitter.pojo;
 
 public class UserFollower {
 	
-	private int user_Id;
-	private int follower_Id;
+	private User user;
+	private int followerId;
 	
-	public int getUser_Id() {
-		return user_Id;
+	public User getUser() {
+		return user;
 	}
-	public void setUser_Id(int user_Id) {
-		this.user_Id = user_Id;
+	public void setUser(User user) {
+		this.user = user;
 	}
-	public int getFollower_Id() {
-		return follower_Id;
+	public int getFollowerId() {
+		return followerId;
 	}
-	public void setFollower_Id(int follower_Id) {
-		this.follower_Id = follower_Id;
+	public void setFollowerId(int followerId) {
+		this.followerId = followerId;
 	}
 	
 	

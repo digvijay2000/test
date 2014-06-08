@@ -4,21 +4,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+
+import java.util.List;
 
 import com.twitter.connectionManager.ConnectionManager;
 import com.twitter.pojo.User;
-import com.twitter.utils.DbClose;
+import com.twitter.utils.DatabaseUtils;
 
 
 public class FollowersDAO {
 	
-	Connection connection;
-	PreparedStatement preparedStatement;
-	ResultSet resultSet;
-	ArrayList<Integer> listOfFollowers;
+	private Connection connection;
+	private PreparedStatement preparedStatement;
+	private ResultSet resultSet;
+	List<Integer> listFollowerId;
 	
-	public ArrayList<Integer> getAllFollowers(int userId){
+	public List<Integer> getAllFollowers(int userId){
 		String selectQuery = "select FOLLOWER_ID from USER_FOLLOWERS where USER_ID = ?";
 		try{
 		connection = ConnectionManager.getConnection();
@@ -26,39 +27,46 @@ public class FollowersDAO {
 		preparedStatement.setInt(1, userId);
 		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()){
-			listOfFollowers.add(resultSet.getInt("FOLLOWER_ID"));
+			listFollowerId.add(resultSet.getInt("FOLLOWER_ID"));
 		}
 		
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally{
+			closeAll();
 		}
-		closeAll();
-		return listOfFollowers;
+		
+		return listFollowerId;
 		
 		
 	}
 
-	public boolean addFollower(User user, int followerId){
+	public boolean addFollower(int userId, int followerId){
 		String InsertQuery = "INSERT INTO TABLE USER_FOLLOWERS(USER_ID, FOLLOWER_ID) "
 				+ "VALUES(?,?)";
-		boolean flag = false;
+		boolean isFollowerAdded = false;
 		try{
 		connection =ConnectionManager.getConnection();
 		preparedStatement = connection.prepareStatement(InsertQuery);
-		preparedStatement.setInt(1, user.getUser_id());
-		preparedStatement.setInt(2, followerId);
-		flag = preparedStatement.execute();
-		closeAll();
+
+//		followerId is the current user 
+//		userId is the user that current user wants to follow
+		preparedStatement.setInt(2, userId);
+		preparedStatement.setInt(1, followerId);
+		isFollowerAdded = preparedStatement.execute();
+		
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally{
+			closeAll();
 		}
-		return flag;
+		return isFollowerAdded;
 	}
 	
 	private void closeAll() {
-		DbClose.close(resultSet);
-		DbClose.close(preparedStatement);
-		DbClose.close(connection);
+		DatabaseUtils.close(resultSet);
+		DatabaseUtils.close(preparedStatement);
+		DatabaseUtils.close(connection);
 		
 	}
 

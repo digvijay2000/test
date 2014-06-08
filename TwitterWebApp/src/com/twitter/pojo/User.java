@@ -4,29 +4,29 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class User {
-	private int user_id;
-	private String email_Id;
+	private int userId;
+	private String emailAddress;
 	private String password;
-	private String first_Name;
-    private String last_Name;
+	private String firstName;
+    private String lastName;
     private String gender;
     private Date dob;
-    private int phone_No;
-    private int alternate_No;
-    private Timestamp created_Time;
+    private int phoneNo;
+    private int alternateNo;
+    private Timestamp createdTime;
     private String status;
     
-	public int getUser_id() {
-		return user_id;
+	public int getUserId() {
+		return userId;
 	}
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setUser_id(int userid) {
+		this.userId = userid;
 	}
 	public String getEmail_Id() {
-		return email_Id;
+		return emailAddress;
 	}
 	public void setEmail_Id(String email_Id) {
-		this.email_Id = email_Id;
+		this.emailAddress = email_Id;
 	}
 	public String getPassword() {
 		return password;
@@ -35,16 +35,16 @@ public class User {
 		this.password = password;
 	}
 	public String getFirst_Name() {
-		return first_Name;
+		return firstName;
 	}
-	public void setFirst_Name(String first_Name) {
-		this.first_Name = first_Name;
+	public void setFirst_Name(String firstName) {
+		this.firstName = firstName;
 	}
 	public String getLast_Name() {
-		return last_Name;
+		return lastName;
 	}
-	public void setLast_Name(String last_Name) {
-		this.last_Name = last_Name;
+	public void setLast_Name(String lastName) {
+		this.lastName = lastName;
 	}
 	public String getGender() {
 		return gender;
@@ -59,22 +59,22 @@ public class User {
 		this.dob = dob;
 	}
 	public int getPhone_No() {
-		return phone_No;
+		return phoneNo;
 	}
-	public void setPhone_No(int phone_No) {
-		this.phone_No = phone_No;
+	public void setPhone_No(int phoneNo) {
+		this.phoneNo = phoneNo;
 	}
 	public int getAlternate_No() {
-		return alternate_No;
+		return alternateNo;
 	}
-	public void setAlternate_No(int alternate_No) {
-		this.alternate_No = alternate_No;
+	public void setAlternate_No(int alternateNo) {
+		this.alternateNo = alternateNo;
 	}
-	public Timestamp getCreated_Time() {
-		return created_Time;
+	public Timestamp getCreatedTime() {
+		return createdTime;
 	}
-	public void setCreated_Time(Timestamp created_Time) {
-		this.created_Time = created_Time;
+	public void setCreated_Time(Timestamp createdTime) {
+		this.createdTime = createdTime;
 	}
 	public String getStatus() {
 		return status;

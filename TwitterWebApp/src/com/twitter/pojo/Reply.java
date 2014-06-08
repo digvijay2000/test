@@ -4,42 +4,42 @@ import java.util.Date;
 
 public class Reply {
 	
-	private int reply_Id;
-	private String reply_Text;
-	private Date reply_Time;
-	private int user_Id;
-	private int tweet_Id;
+	private int replyId;
+	private String replyText;
+	private Date replyTime;
+	private User user;
+	private Tweet tweet;
 	
 	
-	public int getReply_Id() {
-		return reply_Id;
+	public int getReplyId() {
+		return replyId;
 	}
-	public void setReply_Id(int reply_Id) {
-		this.reply_Id = reply_Id;
+	public void setReplyId(int reply_Id) {
+		this.replyId = reply_Id;
 	}
-	public String getReply_Text() {
-		return reply_Text;
+	public String getReplyText() {
+		return replyText;
 	}
-	public void setReply_Text(String reply_Text) {
-		this.reply_Text = reply_Text;
+	public void setReplyText(String reply_Text) {
+		this.replyText = reply_Text;
 	}
-	public Date getReply_Time() {
-		return reply_Time;
+	public Date getReplyTime() {
+		return replyTime;
 	}
-	public void setReply_Time(Date reply_Time) {
-		this.reply_Time = reply_Time;
+	public void setReplyTime(Date reply_Time) {
+		this.replyTime = reply_Time;
 	}
-	public int getUser_Id() {
-		return user_Id;
+	public User getUser() {
+		return user;
 	}
-	public void setUser_Id(int user_Id) {
-		this.user_Id = user_Id;
+	public void setUser(User user) {
+		this.user = user;
 	}
-	public int getTweet_Id() {
-		return tweet_Id;
+	public Tweet getTweet() {
+		return tweet;
 	}
-	public void setTweet_Id(int tweet_Id) {
-		this.tweet_Id = tweet_Id;
+	public void setTweet(Tweet tweet) {
+		this.tweet = tweet;
 	}
 	
 	

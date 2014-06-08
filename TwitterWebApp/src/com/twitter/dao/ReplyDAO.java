@@ -4,22 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.twitter.connectionManager.ConnectionManager;
 import com.twitter.pojo.Reply;
-import com.twitter.pojo.Tweet;
-import com.twitter.pojo.User;
-import com.twitter.utils.DbClose;
+import com.twitter.utils.DatabaseUtils;
 
 public class ReplyDAO {
 	Reply reply;
 	Connection connection;
 	PreparedStatement preparedStatement;
 	ResultSet resultSet;
-	ArrayList<Integer> listOfReplyId;
+	List<Integer> listReplyId;
 	
-	public ArrayList<Integer> getAllReplies(int userId,int tweetId){
+	public List<Integer> getAllReplies(int userId,int tweetId){
 		String selectQuery = "select Reply_Id from Replies where USER_ID = ? and TWEET_ID = ?";
 		try{
 		connection = ConnectionManager.getConnection();
@@ -28,14 +26,16 @@ public class ReplyDAO {
 		preparedStatement.setInt(2, tweetId);
 		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()){
-			listOfReplyId.add(resultSet.getInt("REPLY_ID"));
+			listReplyId.add(resultSet.getInt("REPLY_ID"));
 		}
 				
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally{
+			closeAll();
 		}
-		closeAll();
-		return listOfReplyId;
+		
+		return listReplyId;
 	}
 	
 	
@@ -49,40 +49,44 @@ public Reply findById(int replyId){
 			 resultSet=preparedStatement.executeQuery();
 			
 			 while(resultSet.next()){
-				 reply.setReply_Text(resultSet.getString("REPLY_TEXT"));
-				 reply.setReply_Id(resultSet.getInt("REPLY_ID"));
+				 reply.setReplyText(resultSet.getString("REPLY_TEXT"));
+				 reply.setReplyId(resultSet.getInt("REPLY_ID"));
 			 }
 			 
 			 }catch(SQLException e){
 				 e.printStackTrace();
-			 }
+			 }finally{
+					closeAll();
+				}
 			
 			return reply;
 	
 	}
 
-public boolean addReply(User user, String replyText, int tweetId){
+public boolean addReply(int userId, String replyText, int tweetId){
 	String InsertQuery = "INSERT INTO TABLE REPLIES(REPLY_TEXT,USER_ID,TWEET_ID ) "
 			+ "VALUES(?,?,?)";
-	boolean flag = false;
+	boolean isReplyAdded = false;
 	try{
 	connection =ConnectionManager.getConnection();
 	preparedStatement = connection.prepareStatement(InsertQuery);
-	preparedStatement.setInt(1, user.getUser_id());
+	preparedStatement.setInt(1, userId);
 	preparedStatement.setString(2, replyText);
 	preparedStatement.setInt(3, tweetId);
-	flag = preparedStatement.execute();
-	closeAll();
+	isReplyAdded = preparedStatement.execute();
+	
 	}catch(SQLException e){
 		e.printStackTrace();
+	}finally{
+		closeAll();
 	}
-	return flag;
+	return isReplyAdded;
 }
 
 	private void closeAll() {
-		DbClose.close(resultSet);
-		DbClose.close(preparedStatement);
-		DbClose.close(connection);
+		DatabaseUtils.close(resultSet);
+		DatabaseUtils.close(preparedStatement);
+		DatabaseUtils.close(connection);
 		
 	}
 

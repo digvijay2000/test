@@ -4,19 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import com.twitter.connectionManager.ConnectionManager;
 import com.twitter.pojo.User;
-import com.twitter.utils.DbClose;
+import com.twitter.utils.DatabaseUtils;
 
 public class BlockersDAO {
 	
 	Connection connection;
 	PreparedStatement preparedStatement;
 	ResultSet resultSet;
-//	ArrayList<Integer> blockersList
-// may be no need for this DAO
+
 	
 	
 	public boolean addBlocker(User user, int blockerId){
@@ -26,20 +23,22 @@ public class BlockersDAO {
 		try{
 		connection =ConnectionManager.getConnection();
 		preparedStatement = connection.prepareStatement(InsertQuery);
-		preparedStatement.setInt(1, user.getUser_id());
+		preparedStatement.setInt(1, user.getUserId());
 		preparedStatement.setInt(2, blockerId);
 		flag = preparedStatement.execute();
-		closeAll();
+		
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally{
+			closeAll();
 		}
 		return flag;
 	}
      
 	private void closeAll() {
-		DbClose.close(resultSet);
-		DbClose.close(preparedStatement);
-		DbClose.close(connection);
+		DatabaseUtils.close(resultSet);
+		DatabaseUtils.close(preparedStatement);
+		DatabaseUtils.close(connection);
 		
 	
         }
