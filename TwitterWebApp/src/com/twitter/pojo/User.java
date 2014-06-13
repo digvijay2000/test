@@ -13,7 +13,7 @@ public class User {
     private Date dob;
     private int phoneNo;
     private int alternateNo;
-    private Timestamp createdTime;
+    private Date createdTime;
     private String status;
     
 	public int getUserId() {
@@ -70,7 +70,7 @@ public class User {
 	public void setAlternate_No(int alternateNo) {
 		this.alternateNo = alternateNo;
 	}
-	public Timestamp getCreatedTime() {
+	public Date getCreatedTime() {
 		return createdTime;
 	}
 	public void setCreated_Time(Timestamp createdTime) {

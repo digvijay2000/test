@@ -47,15 +47,27 @@ public class DatabaseUtils {
 	}
 	
 	public static java.sql.Date javaToSqlDate(java.util.Date javaDate){
-		java.sql.Date sqlDate = new java.sql.Date(javaDate.getDate());
+		java.sql.Date sqlDate = new java.sql.Date(javaDate.getTime());
 		
 		return sqlDate;
 		
 	}
 	
 	public static java.util.Date sqlToJavaDate(java.sql.Date sqlDate){
-		java.util.Date javaDate = new java.util.Date(sqlDate.getDate());
+		java.util.Date javaDate = new java.util.Date(sqlDate.getTime());
 		return javaDate;
+	}
+	
+	public static java.sql.Timestamp javatToSqlTimeStamp (java.util.Date javaDate){
+		java.sql.Timestamp timestamp = new java.sql.Timestamp(javaDate.getTime());
+		return timestamp;
+		
+	}
+	
+	public static java.Util.Date sqltToSqlTimeStamp (java.sql.Timestamp timestamp){
+		java.util.Date date = new java.Util.Date(timestamp.getTime());
+		return date;
+		
 	}
 }
 

@@ -1,10 +1,12 @@
 package com.twitter.dao;
 
+import com.twitter.dao.impl.UserDAOImpl;
+
 public class TestDAO {
 
 	public static void main(String[] args) {
 		
-		UserDAO dao = new UserDAO();
+		UserDAOImpl dao = new UserDAOImpl();
 		dao.findById(1);
 
 	}
