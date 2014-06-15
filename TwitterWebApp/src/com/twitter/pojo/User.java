@@ -1,6 +1,6 @@
 package com.twitter.pojo;
 
-import java.sql.Timestamp;
+
 import java.util.Date;
 
 public class User {
@@ -8,14 +8,14 @@ public class User {
 	private String emailAddress;
 	private String password;
 	private String firstName;
-    private String lastName;
-    private String gender;
-    private Date dob;
-    private int phoneNo;
-    private int alternateNo;
-    private Date createdTime;
-    private String status;
-    
+	private String lastName;
+	private String gender;
+	private Date dob;
+	private int phoneNo;
+	private int alternateNo;
+	private Date createdTime;
+	private String status;
+
 	public int getUserId() {
 		return userId;
 	}
@@ -71,17 +71,19 @@ public class User {
 		this.alternateNo = alternateNo;
 	}
 	public Date getCreatedTime() {
+		Date date = new Date();
+		this.createdTime = date;
 		return createdTime;
 	}
-	public void setCreated_Time(Timestamp createdTime) {
-		this.createdTime = createdTime;
-	}
+	//	public void setCreated_Time(Date createdTime) {
+	//		this.createdTime = createdTime;
+	//	}
 	public String getStatus() {
 		return status;
 	}
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-    
+
+
 }

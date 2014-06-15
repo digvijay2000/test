@@ -5,9 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DatabaseUtils {
 
+	private static SimpleDateFormat dateFormat;
 	public static void close (Connection connection){
 		if(connection!=null)
 		try{
@@ -58,16 +62,29 @@ public class DatabaseUtils {
 		return javaDate;
 	}
 	
-	public static java.sql.Timestamp javatToSqlTimeStamp (java.util.Date javaDate){
+	public static java.sql.Timestamp javaToSqlTimeStamp (java.util.Date javaDate){
 		java.sql.Timestamp timestamp = new java.sql.Timestamp(javaDate.getTime());
 		return timestamp;
 		
 	}
 	
-	public static java.Util.Date sqltToSqlTimeStamp (java.sql.Timestamp timestamp){
-		java.util.Date date = new java.Util.Date(timestamp.getTime());
+	public static java.util.Date sqltToJavaTimeStamp (java.sql.Timestamp timestamp){
+		java.util.Date date = new java.util.Date(timestamp.getTime());
 		return date;
 		
+	}
+	
+	public static java.util.Date stringToDate (String dateString, String pattern){
+		dateFormat = new SimpleDateFormat(pattern);
+		
+		java.util.Date date = new Date();
+		try {
+			date =dateFormat.parse(dateString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
 	}
 }
 

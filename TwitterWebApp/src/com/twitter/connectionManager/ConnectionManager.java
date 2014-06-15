@@ -29,8 +29,9 @@ public class ConnectionManager {
 		basicDataSource.setUrl(properties.getProperty("database"));
 		basicDataSource.setUsername(properties.getProperty("user"));
 		basicDataSource.setPassword(properties.getProperty("password"));
-	    
+	   
 			connection = basicDataSource.getConnection();
+			connection.setAutoCommit(false);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

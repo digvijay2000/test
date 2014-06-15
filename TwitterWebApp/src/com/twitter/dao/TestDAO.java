@@ -6,8 +6,8 @@ public class TestDAO {
 
 	public static void main(String[] args) {
 		
-		UserDAOImpl dao = new UserDAOImpl();
-		dao.findById(1);
+//		UserDAOImpl dao = new UserDAOImpl();
+//		dao.findById(1);
 
 	}
 

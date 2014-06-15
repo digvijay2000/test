@@ -1,9 +1,12 @@
 package com.twitter.dao.impl;
 
+
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.twitter.connectionManager.ConnectionManager;
@@ -12,27 +15,34 @@ import com.twitter.pojo.Tweet;
 import com.twitter.utils.DatabaseUtils;
 
 public class TweetDAOImpl implements TweetDAO {
+	
+	public TweetDAOImpl(Tweet tweet){
+		this.tweet = tweet;
+	}
 	private Tweet tweet;
 	private Connection connection;
 	private PreparedStatement preparedStatement;
 	private ResultSet resultSet;
 	private List<Integer> listTweetId;
-	private static final String SQL_RETRIEVE_ALL_TWEETS_ = "select TWEET_ID from TWEETS where USER_ID = ?";
-	private static final String SQL_RETRIEVE_BY_ID ="select TWEET_TEXT from TWEETS where TWEET_ID = ?";
-	private static final String SQL_INSERT_TWEET = "INSERT INTO TABLE TWEETS (TWEET_TEXT,USER_ID ) "
+	private static final String SQL_RETRIEVE_ALL_TWEETS_ = "select * from TWEETS where USER_ID = ?";
+	private static final String SQL_RETRIEVE_BY_ID ="select * from TWEETS where TWEET_ID = ?";
+	private static final String SQL_INSERT_TWEET = "INSERT INTO TWEETS (USER_ID, TWEET_TEXT ) "
 			+ "VALUES(?,?)";
+	private static final String SQL_DELETE_TWEET = "DELETE FROM TWEETS WHERE TWEET_ID = ?";
+	
 	public List<Integer> getAllTweets(int userId){
 		
 		try{
 		connection = ConnectionManager.getConnection();
-		connection.prepareStatement(SQL_RETRIEVE_ALL_TWEETS_);
+		preparedStatement = connection.prepareStatement(SQL_RETRIEVE_ALL_TWEETS_);
 		preparedStatement.setInt(1, userId);
 		resultSet = preparedStatement.executeQuery();
+		listTweetId = new ArrayList<Integer>();
 		while(resultSet.next()){
 			listTweetId.add(resultSet.getInt("TWEET_ID"));
 		}
 		
-		
+		connection.commit();
 		}catch(SQLException e){
 			e.printStackTrace();
 		}finally{
@@ -77,6 +87,7 @@ public boolean addTweet(int userId, String tweetText){
 	preparedStatement.setInt(1, userId);
 	preparedStatement.setString(2, tweetText);
 	isTweetAdded = preparedStatement.execute();
+	connection.commit();
 	
 	}catch(SQLException e){
 		e.printStackTrace();
@@ -96,7 +107,17 @@ public boolean addTweet(int userId, String tweetText){
 
 	@Override
 	public boolean deleteTweet(int UserId, int tweetId) {
-		// TODO Auto-generated method stub
+		try{
+			connection = ConnectionManager.getConnection();
+			preparedStatement = connection.prepareStatement(SQL_DELETE_TWEET);
+			preparedStatement.setInt(1, tweetId);
+			preparedStatement.execute();
+			connection.commit();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			closeAll();
+		}
 		return false;
 	}
 
