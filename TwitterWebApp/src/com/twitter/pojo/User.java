@@ -15,18 +15,17 @@ public class User {
 	private int alternateNo;
 	private Date createdTime;
 	private String status;
-
 	public int getUserId() {
 		return userId;
 	}
-	public void setUser_id(int userid) {
-		this.userId = userid;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
-	public String getEmail_Id() {
+	public String getEmailAddress() {
 		return emailAddress;
 	}
-	public void setEmail_Id(String email_Id) {
-		this.emailAddress = email_Id;
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 	public String getPassword() {
 		return password;
@@ -34,16 +33,16 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getFirst_Name() {
+	public String getFirstName() {
 		return firstName;
 	}
-	public void setFirst_Name(String firstName) {
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	public String getLast_Name() {
+	public String getLastName() {
 		return lastName;
 	}
-	public void setLast_Name(String lastName) {
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 	public String getGender() {
@@ -55,29 +54,30 @@ public class User {
 	public Date getDob() {
 		return dob;
 	}
-	public void setDob(Date dob) {
-		this.dob = dob;
+	public void setDob(Date date) {
+		this.dob = date;
 	}
-	public int getPhone_No() {
+	public int getPhoneNo() {
 		return phoneNo;
 	}
-	public void setPhone_No(int phoneNo) {
+	public void setPhoneNo(int phoneNo) {
 		this.phoneNo = phoneNo;
 	}
-	public int getAlternate_No() {
+	public int getAlternateNo() {
 		return alternateNo;
 	}
-	public void setAlternate_No(int alternateNo) {
+	public void setAlternateNo(int alternateNo) {
 		this.alternateNo = alternateNo;
 	}
 	public Date getCreatedTime() {
-		Date date = new Date();
-		this.createdTime = date;
-		return createdTime;
+	return this.createdTime;
 	}
-	//	public void setCreated_Time(Date createdTime) {
-	//		this.createdTime = createdTime;
-	//	}
+	
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+		}
+	
+	
 	public String getStatus() {
 		return status;
 	}
@@ -86,4 +86,5 @@ public class User {
 	}
 
 
+	
 }

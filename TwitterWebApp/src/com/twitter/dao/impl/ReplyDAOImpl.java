@@ -13,104 +13,128 @@ import com.twitter.pojo.Reply;
 import com.twitter.utils.DatabaseUtils;
 
 public class ReplyDAOImpl implements ReplyDAO{
-	private Reply reply;
-	private Connection connection;
-	private PreparedStatement preparedStatement;
-	private ResultSet resultSet;
-	private List<Integer> listReplyId;
+
+	 
+	
 	private static final String SQL_RETRIEVE_ALL_REPLIES = "SELECT * FROM REPLIES WHERE TWEET_ID = ?";
 	private static final String SQL_RETRIEVE_BY_ID ="SELECT * FROM REPLIES WHERE REPLY_ID = ?";
 	private static final String SQL_INSERT_REPLY = "INSERT INTO  REPLIES(USER_ID,REPLY_TEXT,TWEET_ID ) "
 			+ "VALUES(?,?,?)";
 	private static final String SQL_DELETE_REPLY ="DELETE FROM REPLIES WHERE REPLY_ID =?";
-	
+
 	public List<Integer> getAllReplies(int tweetId){
-		
+		Connection connection = null;
+		 PreparedStatement preparedStatement = null;
+		 ResultSet resultSet = null;
+		 List<Integer> listReplyId = null;
 		try{
-		connection = ConnectionManager.getConnection();
-		preparedStatement = connection.prepareStatement(SQL_RETRIEVE_ALL_REPLIES);
-		preparedStatement.setInt(1, tweetId);
-		resultSet = preparedStatement.executeQuery();
-		listReplyId = new ArrayList<Integer>();
-		while(resultSet.next()){
-			listReplyId.add(resultSet.getInt("REPLY_ID"));
-		}
-				
+			connection = ConnectionManager.getConnection();
+			preparedStatement = connection.prepareStatement(SQL_RETRIEVE_ALL_REPLIES);
+			preparedStatement.setInt(1, tweetId);
+			resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()){
+				if(listReplyId==null)
+				listReplyId = new ArrayList<Integer>();
+				listReplyId.add(resultSet.getInt("REPLY_ID"));
+			}
+
 		}catch(SQLException e){
 			e.printStackTrace();
 		}finally{
-			closeAll();
+			closeAll(connection, preparedStatement, resultSet);
 		}
-		
+
 		return listReplyId;
 	}
-	
-	
-public Reply findById(int replyId){
-		
-			 try{
-			 connection = ConnectionManager.getConnection();
-			 preparedStatement = connection.prepareStatement(SQL_RETRIEVE_BY_ID);
-			 preparedStatement.setInt(1, replyId);
-			 resultSet=preparedStatement.executeQuery();
-			reply = new Reply();
-			 while(resultSet.next()){
-				 reply.setReplyText(resultSet.getString("REPLY_TEXT"));
-				 reply.setReplyId(resultSet.getInt("REPLY_ID"));
-			 }
-			 
-			 }catch(SQLException e){
-				 e.printStackTrace();
-			 }finally{
-					closeAll();
-				}
-			
-			return reply;
-	
-	}
-
-public boolean addReply(int userId, String replyText, int tweetId){
-	boolean isReplyAdded = false;
-	try{
-	connection =ConnectionManager.getConnection();
-	preparedStatement = connection.prepareStatement(SQL_INSERT_REPLY);
-	preparedStatement.setInt(1, userId);
-	preparedStatement.setString(2, replyText);
-	preparedStatement.setInt(3, tweetId);
-	isReplyAdded = preparedStatement.execute();
-	connection.commit();
-	}catch(SQLException e){
-		e.printStackTrace();
-	}finally{
-		closeAll();
-	}
-	return isReplyAdded;
-}
-
-	private void closeAll() {
-		DatabaseUtils.close(resultSet);
-		DatabaseUtils.close(preparedStatement);
-		DatabaseUtils.close(connection);
-		
-	}
 
 
-	@Override
-	public boolean deleteReply(int replyId) {
+	public Reply findById(int replyId){
+		Connection connection = null;
+		 PreparedStatement preparedStatement = null;
+		 ResultSet resultSet = null;
+		Reply reply = null;
 		try{
 			connection = ConnectionManager.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_DELETE_REPLY);
+			preparedStatement = connection.prepareStatement(SQL_RETRIEVE_BY_ID);
 			preparedStatement.setInt(1, replyId);
-			preparedStatement.execute();
+			resultSet=preparedStatement.executeQuery();
+		
+			while(resultSet.next()){
+				reply = new Reply();
+				reply.setReplyText(resultSet.getString("REPLY_TEXT"));
+				reply.setReplyId(resultSet.getInt("REPLY_ID"));
+			}
+
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			closeAll(connection,preparedStatement,resultSet);
+		}
+
+		return reply;
+
+	}
+
+	public int addReply(int userId, String replyText, int tweetId){
+		Connection connection = null;
+		 PreparedStatement preparedStatement = null;
+		 ResultSet resultSet = null;
+		int replyAddedCount = 0;
+		try{
+			connection =ConnectionManager.getConnection();
+			preparedStatement = connection.prepareStatement(SQL_INSERT_REPLY);
+			preparedStatement.setInt(1, userId);
+			preparedStatement.setString(2, replyText);
+			preparedStatement.setInt(3, tweetId);
+			replyAddedCount = preparedStatement.executeUpdate();
 			connection.commit();
 		}catch(SQLException e){
 			e.printStackTrace();
 		}finally{
-			closeAll();
+			closeAll(connection, preparedStatement, resultSet);
 		}
-		return false;
+		return replyAddedCount;
 	}
 
 
+
+
+	@Override
+	public int deleteReply(int replyId) {
+		Connection connection = null;
+		 PreparedStatement preparedStatement = null;
+		 
+		int replyDeletedCount = 0;
+		try{
+			connection = ConnectionManager.getConnection();
+			preparedStatement = connection.prepareStatement(SQL_DELETE_REPLY);
+			preparedStatement.setInt(1, replyId);
+			replyDeletedCount = preparedStatement.executeUpdate();
+			connection.commit();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			closeAll(connection, preparedStatement);
+		}
+		return replyDeletedCount;
+	}
+
+
+	private void closeAll(Connection connection,
+			PreparedStatement preparedStatement, ResultSet resultSet) {
+		DatabaseUtils.close(resultSet);
+		DatabaseUtils.close(preparedStatement);
+		DatabaseUtils.close(connection);
+
+	}
+
+	private void closeAll(Connection connection,
+			PreparedStatement preparedStatement) {
+
+		DatabaseUtils.close(preparedStatement);
+		DatabaseUtils.close(connection);
+
+	}
 
 }

@@ -5,8 +5,8 @@ import com.twitter.pojo.User;
 public interface UserDAO extends DAO{
 	public User findById(int userId);
 	public User findByName(String string);
-	public boolean addUser(User user);
-	public boolean deleteUser(int UserId);
-	public boolean updateUser(User user);
+	public int addUser(User user);
+	public int deleteUser(int UserId);
+	public int updateUser(User user);
 
 }

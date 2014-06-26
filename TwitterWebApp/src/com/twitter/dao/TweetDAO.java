@@ -9,8 +9,8 @@ public interface TweetDAO extends DAO{
 	
 	public Tweet findById(int tweetId);
 	public List<Integer> getAllTweets(int UserId);
-	public boolean addTweet(int UserId, String tweetText);
-	public boolean deleteTweet(int UserId, int tweetId);
+	public int addTweet(int UserId, String tweetText);
+	public int deleteTweet(int UserId, int tweetId);
 	
 
 }

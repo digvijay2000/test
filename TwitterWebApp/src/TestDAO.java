@@ -29,16 +29,16 @@ public class TestDAO {
 
 	public static void main(String[] args) throws ParseException {
 
-		String test = "test";
-//		User user = new User();
-		UserDAO userDAO = new UserDAOImpl();
-		User user =userDAO.findById(3);
-		System.out.println(user.getEmail_Id());
+//		String test = "test";
+////		User user = new User();
+//		UserDAO userDAO = new UserDAOImpl();
+//		User user =userDAO.findById(3);
+//		System.out.println(user.getEmailAddress());
 		//		User user = new User();
 		//		user.setFirst_Name("htf");
 		//		user.setPassword("lkn");
 		////		String dobString = "12-02-1990";
-		////		SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
+		//		SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
 		////		Date dob = format.parse(dobString);
 		//			
 		//		Date dob =	DatabaseUtils.stringToDate("10-12-1990", "dd-mm-yyyy");
@@ -109,29 +109,34 @@ public class TestDAO {
 //			System.out.println(tweet.getTweetText());
 //		}
 		
-		Reply reply = new Reply();
-		ReplyDAO replyDAO = new ReplyDAOImpl();
-//		replyDAO.addReply(5, "they will bounce back", 1);
+//		Reply reply = new Reply();
+//		ReplyDAO replyDAO = new ReplyDAOImpl();
+////		replyDAO.addReply(5, "they will bounce back", 1);
+//		
+////		Reply reply = replyDAO.findById(1);
+////		System.out.println(reply.getReplyText());
+//		
+//		List<Integer> list = new ArrayList<Integer>();
+//		replyDAO.deleteReply(1);
+//		list=replyDAO.getAllReplies(1);
+//		
+//		ListIterator<Integer> iterator = list.listIterator();
+//		while(iterator.hasNext()){
+//			reply = replyDAO.findById(iterator.next());
+//			System.out.println(reply.getReplyText());
+//		}
+//		
 		
-//		Reply reply = replyDAO.findById(1);
-//		System.out.println(reply.getReplyText());
-		
-		List<Integer> list = new ArrayList<Integer>();
-		replyDAO.deleteReply(1);
-		list=replyDAO.getAllReplies(1);
-		
-		ListIterator<Integer> iterator = list.listIterator();
-		while(iterator.hasNext()){
-			reply = replyDAO.findById(iterator.next());
-			System.out.println(reply.getReplyText());
-		}
 		
 		
-		
-		
+//		UserDAO userDAO = new UserDAOImpl();
+//		User user = userDAO.findById(userId)
 		
 
-
+		UserDAO userDAO = new UserDAOImpl();
+		User user = userDAO.findById(2);
+		user.setStatus("heya");
+		user.setPassword("something");
+		userDAO.updateUser(user);
 	}
-
 }
