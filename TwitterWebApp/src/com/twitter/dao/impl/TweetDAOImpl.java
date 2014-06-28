@@ -45,7 +45,6 @@ public class TweetDAOImpl implements TweetDAO {
 		} finally {
 			closeAll(connection, preparedStatement, resultSet);
 		}
-
 		return listTweetId;
 	}
 
@@ -61,7 +60,6 @@ public class TweetDAOImpl implements TweetDAO {
 			preparedStatement = connection.prepareStatement(SQL_RETRIEVE_BY_ID);
 			preparedStatement.setInt(1, tweetId);
 			resultSet = preparedStatement.executeQuery();
-
 			while (resultSet.next()) {
 				tweet = new Tweet();
 				tweet.setTweetText(resultSet.getString("TWEET_TEXT"));

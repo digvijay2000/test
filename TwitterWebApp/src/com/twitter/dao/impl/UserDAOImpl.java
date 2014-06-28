@@ -37,7 +37,7 @@ public class UserDAOImpl implements UserDAO {
 
 			user = fetchFromResultSet(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			throw new SQLException();
 		} finally {
 			closeAll(connection, preparedStatement);
 		}
@@ -65,11 +65,9 @@ public class UserDAOImpl implements UserDAO {
 		return user;
 	}
 
-	public int addUser(User user) {
+	public int addUser(User user)  {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-		
-
 		int isUserAdded = 0;
 		try {
 			connection = ConnectionManager.getConnection();
@@ -90,6 +88,7 @@ public class UserDAOImpl implements UserDAO {
 			connection.commit();
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
 		} finally {
 			closeAll(connection, preparedStatement);
@@ -98,9 +97,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	private User fetchFromResultSet(ResultSet resultSet) {
-
 		try {
-
 			while (resultSet.next()) {
 				if (user == null)
 					user = new User();
@@ -113,13 +110,11 @@ public class UserDAOImpl implements UserDAO {
 				user.setEmailAddress(resultSet.getString("EMAIL_ID"));
 				user.setDob(DatabaseUtils.sqlToJavaDate(resultSet
 						.getDate("DOB")));
-
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return user;
-
 	}
 
 
@@ -185,7 +180,6 @@ public class UserDAOImpl implements UserDAO {
 
 	private void closeAll(Connection connection,
 			PreparedStatement preparedStatement) {
-
 		DatabaseUtils.close(preparedStatement);
 		DatabaseUtils.close(connection);
 

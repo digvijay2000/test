@@ -25,7 +25,7 @@ public class ConnectionManager {
 			properties.load(inputStream);
 		
 		BasicDataSource basicDataSource = new BasicDataSource();
-		basicDataSource.setDriverClassName(properties.getProperty("class"));
+		basicDataSource.setDriverClassName(properties.getProperty("driver"));
 		basicDataSource.setUrl(properties.getProperty("database"));
 		basicDataSource.setUsername(properties.getProperty("user"));
 		basicDataSource.setPassword(properties.getProperty("password"));
